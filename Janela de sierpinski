@@ -1,0 +1,91 @@
+import java.awt.Frame;
+import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.Color;
+import javax.swing.JFrame;
+
+public class Programa_Sierpinski extends JFrame {
+
+	public Programa_Sierpinski() {
+		initGUI();
+	}
+
+	// GUI: Graphic Unit Interface
+	// iniciar a interface grafica
+	private void initGUI() {
+		// titulo da janela
+		this.setTitle("Triangulo de Sierpinski");
+		// tamanho da Janela (largura, altura)
+		setSize(1000, 900);
+		// centralizar a janela em relacao a tela
+		setLocationRelativeTo(null);
+		// fechar o programa ao fechar janela
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Canvas eh area de desenho
+		DesenhoCanvas desenho = new DesenhoCanvas();
+		// inserir o canvas dentro do frame
+		add(desenho);
+
+		// mostrar janela
+		this.setVisible(true);
+	}
+
+	class DesenhoCanvas extends Canvas {
+
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			criaTriangulo(g);
+		}
+
+		private void criaTriangulo(Graphics g) {
+			// x1, y1, x2, y2
+//			g.drawLine(0,0,500,500);
+//			g.drawOval(200,200,300,300);
+//			g.fillOval(500,200,300,200);
+			int altura = getHeight() - 10;
+			int largura = getWidth() - 10;
+
+			int[] xs = { 0, largura / 2, largura };
+			int[] ys = { altura, 0, altura };
+			g.fillPolygon(xs, ys, 3);
+
+			criaTrianguloRecu(g, 1, 7, xs[0], ys[0], xs[1], ys[1], xs[2],
+					ys[2]); 
+
+		}
+
+		private void criaTrianguloRecu(Graphics g, int nivel, int nivelMax,
+				int x1, int y1, int x2, int y2, int x3, int y3) {
+			if (nivel <= nivelMax) {
+				try {
+					// 1000 ms = 1s
+					Thread.sleep(100); 
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				// calculando o triangulo branco
+				int x12 = (x1 + x2) / 2;
+				int y12 = (y1 + y2) / 2;
+				int x23 = (x2 + x3) / 2;
+				int y23 = (y2 + y3) / 2;
+				// int x13 = (x1+x3) /2; mesmo x2
+				// int y13 = mesmo y1 ou y3
+				int[] xs = {x12,x23,x2};
+				int[] ys = {y12,y23,y1};
+				g.setColor(Color.BLACK);
+				g.fillPolygon(xs, ys, 3);
+				
+				// Triangulo esquerda
+				criaTrianguloRecu(g, nivel+1, nivelMax, x1, y1, x12, y12, x2, y1);
+				// Triangulo cima
+				criaTrianguloRecu(g, nivel+1, nivelMax, x12, y12, x2, y2, x23, y23);
+				// Triangulo direita
+				criaTrianguloRecu(g, nivel+1, nivelMax, x2, y1, x23, y23, x3, y3);
+			}
+		}
+
+	}
+}
+// fim de class JanelaSierpinski

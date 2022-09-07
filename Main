@@ -1,0 +1,8 @@
+
+public class Main_Programa_Sierpinski {
+
+    public static void main(String[] args) {
+        Programa_Sierpinski jp = new Programa_Sierpinski();
+    }
+}
+
